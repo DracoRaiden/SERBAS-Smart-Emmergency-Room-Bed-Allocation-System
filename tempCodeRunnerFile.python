@@ -1,0 +1,50 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# Set a random seed for reproducibility
+np.random.seed(42)
+
+N = 1000  # Number of samples (patients)
+
+# Generate realistic but synthetic features
+age = np.random.randint(18, 90, N)
+heart_rate = np.random.randint(50, 160, N)
+bp_systolic = np.random.randint(90, 180, N)
+bp_diastolic = np.random.randint(60, 110, N)
+spO2 = np.random.randint(85, 100, N)
+temperature = np.round(np.random.uniform(36.0, 40.5, N), 1)
+
+# Initialize severity array
+severity = np.array(['low'] * N)
+
+# --- Define Rules for Severity (Triage Logic to create labels) ---
+# High Severity: Very low SpO2 OR extreme heart rate OR high fever
+high_risk_indices = (spO2 < 92) | (heart_rate > 130) | (temperature >= 40.0) | (bp_systolic < 95)
+severity[high_risk_indices] = 'high'
+
+# Medium Severity: Moderate abnormalities OR high age
+medium_risk_indices = (spO2 >= 92) & (spO2 < 95) | \
+                      (heart_rate >= 100) & (heart_rate <= 130) | \
+                      (temperature >= 38.5) & (temperature < 40.0) | \
+                      (age >= 70)
+# Ensure Medium doesn't overwrite High
+severity[medium_risk_indices & (severity != 'high')] = 'medium'
+
+# Create DataFrame
+data = pd.DataFrame({
+    'age': age,
+    'heart_rate': heart_rate,
+    'bp_systolic': bp_systolic,
+    'bp_diastolic': bp_diastolic,
+    'spO2': spO2,
+    'temperature': temperature,
+    'severity': severity
+})
+
+# Save the generated dataset to a CSV file
+# 🚨 CRITICAL: Save this file in the root directory of your SERBAS project (next to app.py)
+data.to_csv('synthetic_triage_data.csv', index=False)
+
+print("✅ Synthetic Triage Dataset created and saved as synthetic_triage_data.csv")
+print(f"Severity Distribution:\n{data['severity'].value_counts()}")
