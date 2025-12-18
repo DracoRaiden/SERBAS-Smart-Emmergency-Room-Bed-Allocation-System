@@ -57,11 +57,4 @@ SERBAS uses a novel combination of algorithms to ensure fair and efficient alloc
 
 4.  **Access the System**
     Open your web browser and navigate to the local host or the live demo below.
-
-## 🌐 Live Demo
-
-Check out the deployed application here:
-👉 **[Launch SERBAS](https://hospital-bed-management-5ti2.onrender.com)**
-
----
-> **Note:** The initial load on Render may take up to 50 seconds as the free instance spins up.
+ The initial load on Render may take up to 50 seconds as the free instance spins up.
